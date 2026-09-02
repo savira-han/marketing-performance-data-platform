@@ -582,3 +582,30 @@ fact_ad_performance.to_csv(
 
 print("\nCreated fact_ad_performance!")
 print(fact_ad_performance.head())
+
+# -------------------------
+# 14. Create dim_date
+# -------------------------
+
+date_range = pd.date_range(
+    start=start_date,
+    end=end_date,
+    freq="D"
+)
+
+dim_date = pd.DataFrame({
+    "date": date_range,
+    "year": date_range.year,
+    "month": date_range.month,
+    "month_name": date_range.month_name(),
+    "quarter": date_range.quarter,
+    "day_of_week": date_range.day_name()
+})
+
+dim_date.to_csv(
+    "data/processed/dim_date.csv",
+    index=False
+)
+
+print("\nCreated dim_date!")
+print(dim_date.head())
