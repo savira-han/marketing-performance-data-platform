@@ -1,4 +1,6 @@
-channel_id,channel_name
-CH01,Google Ads
-CH02,Meta
-CH03,TikTok
+channel_id,channel_name,channel_group
+CH01,Google Ads,Paid Search
+CH02,Meta,Paid Social
+CH03,TikTok,Paid Social
+CH04,Direct,Direct / Organic
+CH05,Organic Search,Direct / Organic
