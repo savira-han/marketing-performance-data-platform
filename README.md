@@ -42,3 +42,53 @@ One campaign also contains an intentional attribution-quality challenge. The cam
 The purpose of these scenarios is not to reproduce a real company's data exactly. Instead, the dataset is designed to reproduce the types of relationships, edge cases, and analytical problems that can occur in a real marketing analytics environment.
 
 For the detailed data model, customer journey logic, attribution rules, and synthetic-data design decisions, see [`DATA_DESIGN.md`](DATA_DESIGN.md).
+
+## Pipeline
+
+The project uses a local, reproducible pipeline to generate synthetic source data, validate and ingest the raw data, and load it into DuckDB for analysis.
+
+```text
+Synthetic data generation
+        ↓
+Raw CSV data
+        ↓
+Validation & ingestion
+        ↓
+DuckDB
+        ↓
+SQL analysis
+```
+
+### Pipeline components
+
+* `src/generate_data.py` — generates the synthetic OTA source data and performs data-generation validations.
+* `src/ingest_data.py` — loads the raw CSV files, validates keys, foreign-key relationships, and business-value constraints, then loads the data into DuckDB.
+* `analytics.duckdb` — local analytical database containing the ingested source tables.
+* `run_pipeline.py` — orchestrates the complete workflow so the project can be executed with a single command.
+
+### Run the pipeline
+
+From the project root:
+
+```bash
+python run_pipeline.py
+```
+
+The pipeline executes the generation and ingestion steps in the correct order.
+
+The workflow is designed to be safely re-runnable. The DuckDB tables are recreated during ingestion, allowing the database to be rebuilt from the generated source data without relying on a previous database state.
+
+### Current DuckDB tables
+
+The ingestion pipeline creates the following source tables:
+
+| Table            | Description                        |
+| ---------------- | ---------------------------------- |
+| `customers`      | Customer-level information         |
+| `channels`       | Marketing channel definitions      |
+| `campaigns`      | Marketing campaign definitions     |
+| `touchpoints`    | Customer marketing interactions    |
+| `bookings`       | Customer booking transactions      |
+| `ad_performance` | Daily campaign performance metrics |
+
+This provides the foundation for the SQL-based marketing and growth analyses developed in the next stage of the project.
