@@ -113,25 +113,33 @@ The grain of each table is intentionally defined so that downstream joins and ag
 
 ---
 
-## 5. Raw and Processed Layers
+## 5. Data Layers and Modeling Approach
 
-The project separates source-style data from the analytical model.
+The project separates source-style data ingestion from analytical transformation and modeling.
 
 ```text
 data/raw/
+
     ↓
+
 Python ingestion & validation
+
     ↓
-DuckDB
+
+DuckDB source tables
+
     ↓
-SQL transformations
+
+SQL transformations / analytical models
+
     ↓
-data/processed/
+
+Business analysis
 ```
 
 ### Raw layer
 
-The raw layer represents source-style datasets:
+The raw layer represents source-style datasets generated to simulate data from an OTA environment:
 
 * `customers.csv`
 * `channels.csv`
@@ -140,19 +148,29 @@ The raw layer represents source-style datasets:
 * `bookings.csv`
 * `ad_performance.csv`
 
-### Processed layer
+These datasets are treated as the source data for the local analytical pipeline.
 
-The processed layer provides the analytical model:
+### Ingestion layer
 
-* `dim_customer.csv`
-* `dim_campaign.csv`
-* `dim_channel.csv`
-* `dim_date.csv`
-* `fact_marketing_touchpoint.csv`
-* `fact_booking.csv`
-* `fact_ad_performance.csv`
+`src/ingest_data.py` loads the raw CSV datasets into DuckDB and performs basic structural and business-value validation, including primary-key, foreign-key, grain, and value checks.
 
-The separation allows the project to demonstrate both ingestion and analytical modeling rather than treating the final analytical tables as the original source data.
+The resulting DuckDB tables represent the ingested source data and provide the foundation for downstream analysis.
+
+### Transformation and analytical modeling
+
+Analytical transformations are performed in DuckDB using SQL rather than during synthetic data generation.
+
+A transformed dataset will be materialized as an analytical model when it represents a useful reusable business concept. For simpler analyses, SQL queries and CTEs may be used directly without creating an additional physical model.
+
+This separation keeps the responsibilities of the project clear:
+
+* `generate_data.py` → generates synthetic source data
+* `ingest_data.py` → ingests and validates source data
+* SQL → transforms and models data for analytical use
+* Analytical queries → answer business questions and generate insights
+
+This approach allows the project to demonstrate both practical data engineering and analytical capabilities without mixing synthetic data generation with downstream data transformation.
+
 
 ---
 
