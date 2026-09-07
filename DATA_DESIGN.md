@@ -162,6 +162,31 @@ Analytical transformations are performed in DuckDB using SQL rather than during 
 
 A transformed dataset will be materialized as an analytical model when it represents a useful reusable business concept. For simpler analyses, SQL queries and CTEs may be used directly without creating an additional physical model.
 
+#### `customer_first_booking`
+
+The first reusable analytical model is `customer_first_booking`.
+
+Its grain is:
+
+> 1 row per customer with a first booking in 2025.
+
+The model identifies each customer's first-ever booking by ranking bookings chronologically within each customer and retaining the earliest booking.
+
+It contains:
+
+| Column | Purpose |
+|---|---|
+| `customer_id` | Customer identifier |
+| `first_booking_id` | Identifier of the customer's first booking |
+| `first_booking_timestamp` | Timestamp of the first booking |
+| `first_booking_value` | Value of the first booking |
+| `acquisition_campaign_id` | Campaign attributed to the customer's first booking |
+| `acquisition_source` | Paid Campaign or Organic / Direct / Unattributed |
+
+The model provides a reusable customer-level foundation for acquisition, CAC, customer quality, retention, and customer value analysis.
+
+The model is materialized in DuckDB rather than written back to the raw CSV layer. This preserves the separation between source data and analytical models.
+
 This separation keeps the responsibilities of the project clear:
 
 * `generate_data.py` → generates synthetic source data
