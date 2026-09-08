@@ -88,28 +88,22 @@ This would be difficult to represent consistently if customers, bookings, and to
 
 ---
 
-## 4. Data Model
+## 4. Source Tables Generated & Ingested
 
-The project uses a dimensional-style analytical model consisting of dimensions and fact tables.
+### Current DuckDB tables
 
-### Dimension tables
+The ingestion pipeline creates the following source tables:
 
-| Table          | Grain              | Purpose                                         |
-| -------------- | ------------------ | ----------------------------------------------- |
-| `dim_customer` | 1 row per customer | Customer attributes and acquisition information |
-| `dim_campaign` | 1 row per campaign | Campaign attributes and channel relationship    |
-| `dim_channel`  | 1 row per channel  | Marketing channel definitions                   |
-| `dim_date`     | 1 row per date     | Consistent date analysis                        |
+| Table            | Description                        |
+| ---------------- | ---------------------------------- |
+| `customers`      | Customer-level information         |
+| `channels`       | Marketing channel definitions      |
+| `campaigns`      | Marketing campaign definitions     |
+| `touchpoints`    | Customer marketing interactions    |
+| `bookings`       | Customer booking transactions      |
+| `ad_performance` | Daily campaign performance metrics |
 
-### Fact tables
-
-| Table                       | Grain                      | Purpose                                            |
-| --------------------------- | -------------------------- | -------------------------------------------------- |
-| `fact_marketing_touchpoint` | 1 row per touchpoint       | Customer interactions with marketing activity      |
-| `fact_booking`              | 1 row per booking          | Booking transactions and booking-level attribution |
-| `fact_ad_performance`       | 1 row per campaign per day | Campaign delivery, clicks, and spend               |
-
-The grain of each table is intentionally defined so that downstream joins and aggregations can be controlled.
+This provides the foundation for the SQL-based marketing and growth analyses developed in the next stage of the project.
 
 ---
 

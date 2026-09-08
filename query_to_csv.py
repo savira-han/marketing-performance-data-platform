@@ -18,19 +18,22 @@ def run_query(query_name):
     sql = query_path.read_text()
 
     con = duckdb.connect(str(DB_PATH))
-
     try:
         result = con.sql(sql)
-        # Force a massive width so no columns or text are hidden by '...'
-        result.show(max_width=10000)
-        print(result)
+        
+        # 1. Convert DuckDB result to a Pandas DataFrame
+        # 2. Output as a clean CSV string (index=False removes row numbers)
+        csv_string = result.df().to_csv(index=False)
+        
+        print(csv_string)
     finally:
         con.close()
 
 
+
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print("Usage: python query.py <query_file>")
+        print("Usage: python query_to_csv.py <query_file>")
         sys.exit(1)
 
     run_query(sys.argv[1])
