@@ -1,12 +1,17 @@
-import duckdb
-
-# 1. Connect to your database file (creates it if it doesn't exist)
-conn = duckdb.connect("analytics.duckdb")
-
-# 2. Define your query wrapped in a CREATE TABLE AS statement
-# (Notice the 'CREATE TABLE acquired_customer_behavior AS' right at the start)
-query = """
-CREATE TABLE acquired_customer_behavior AS
+-- ============================================================
+-- Customer Quality Analysis
+-- ============================================================
+--
+-- Business question:
+-- What does the booking behavior, rebooking speed, and
+-- monetary value of each acquired customer look like?
+--
+-- Grain:
+-- 1 row = 1 acquired customer
+--
+-- Analytical lens:
+-- Customers whose first-ever booking was acquired in 2025
+-- ============================================================
 
 WITH 
 
@@ -107,15 +112,3 @@ SELECT
 FROM acquired_customer_behavior
 
 ORDER BY customer_id;
-"""
-
-# 3. Run the query on the explicit connection
-conn.execute(query)
-
-# 4. Verify it works by querying the new table
-df = conn.execute("SELECT * FROM acquired_customer_behavior LIMIT 5").df()
-print(df)
-
-# Close connection when done
-conn.close()
-print("Table build completed successfully.")

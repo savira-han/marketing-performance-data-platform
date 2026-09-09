@@ -179,6 +179,64 @@ It contains:
 
 The model provides a reusable customer-level foundation for acquisition, CAC, customer quality, retention, and customer value analysis.
 
+#### `acquired_customer_behavior`
+
+The second reusable analytical model is `acquired_customer_behavior`.
+
+Its grain is:
+
+> 1 row per acquired customer
+
+The model builds on `customer_first_booking` and enriches each acquired customer with their observed booking behavior and customer-quality attributes.
+
+It identifies:
+
+* total number of bookings
+* total observed booking value
+* average booking value
+* customer behavioral segment
+* time from first booking to second booking
+
+Customer segments are mutually exclusive:
+
+| Segment    | Definition                       |
+| ---------- | -------------------------------- |
+| `One-time` | Customer made exactly 1 booking  |
+| `Repeat`   | Customer made exactly 2 bookings |
+| `Frequent` | Customer made 3 or more bookings |
+
+The model also calculates `days_to_second_booking` for customers who made a second booking. Customers without a second booking receive `NULL`.
+
+It contains:
+
+| Column                    | Purpose                                                              |
+| ------------------------- | -------------------------------------------------------------------- |
+| `customer_id`             | Customer identifier                                                  |
+| `acquisition_campaign_id` | Campaign attributed to the customer's first-ever booking             |
+| `first_booking_timestamp` | Timestamp of the customer's first booking                            |
+| `first_booking_value`     | Value of the customer's first booking                                |
+| `total_bookings`          | Total number of observed bookings for the customer                   |
+| `total_booking_value`     | Total observed booking value across the customer's bookings          |
+| `avg_booking_value`       | Average booking value across the customer's bookings                 |
+| `customer_segment`        | One-time, Repeat, or Frequent behavioral classification              |
+| `days_to_second_booking`  | Number of days between the first and second booking, when applicable |
+
+The model is designed to support customer-quality analysis by connecting acquisition context with downstream customer behavior.
+
+This allows the project to answer questions such as:
+
+* What types of customers are acquired by each campaign?
+* What proportion of acquired customers are one-time, repeat, or frequent?
+* Do acquisition campaigns attract customers with different observed monetary value?
+* How quickly do acquired customers make a second booking?
+* Does acquisition efficiency translate into different downstream customer behavior?
+
+For campaign comparison, the model can be aggregated by `acquisition_campaign_id` and `customer_segment` to evaluate customer composition, customer value, and rebooking behavior.
+
+The model is materialized in DuckDB as an analytical model rather than written back to the raw CSV layer. This maintains the separation between source data and reusable analytical transformations.
+
+
+
 The model is materialized in DuckDB rather than written back to the raw CSV layer. This preserves the separation between source data and analytical models.
 
 This separation keeps the responsibilities of the project clear:

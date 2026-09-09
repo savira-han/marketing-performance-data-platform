@@ -23,7 +23,6 @@ def run_query(query_name):
         result = con.sql(sql)
         # Force a massive width so no columns or text are hidden by '...'
         result.show(max_width=10000)
-        print(result)
     finally:
         con.close()
 
