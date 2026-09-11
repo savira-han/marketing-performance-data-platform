@@ -1,432 +1,391 @@
 # Marketing Performance Data Platform
 
-An end-to-end marketing analytics project that combines **data engineering, SQL analysis, customer behavior analysis, and business decision-making** in an Online Travel Agency (OTA) context.
+## Overview
 
-The project is designed around a practical marketing question:
+The objective of this analysis is to evaluate the effectiveness of marketing acquisition across the customer journey — from initial campaign exposure and customer acquisition to customer value, repeat bookings, and attribution reliability.
 
-> **How can a marketing team understand not only which campaigns acquire customers, but also how efficiently they acquire them, what those customers do afterward, and whether the reported performance can be trusted?**
+The analysis combines marketing performance, customer behavior, booking activity, and campaign attribution to answer a broader business question:
 
-The analysis covers the full journey:
+> **Which marketing activities are generating valuable customers efficiently, how is customer behavior contributing to growth, and how much confidence should be placed in reported campaign performance?**
+> 
 
-**Marketing touchpoints → Customer acquisition → Campaign efficiency → Customer quality → Booking growth → Attribution integrity → Business recommendations**
+The analysis covers:
 
----
-
-## Business Context
-
-Marketing teams often evaluate campaigns using metrics such as spend, CAC, conversion rate, and ROAS.
-
-Those metrics are useful, but they do not tell the whole story.
-
-A campaign can have:
-
-* strong acquisition volume but poor efficiency
-* efficient acquisition but weak downstream customer value
-* high reported conversion but limited evidence of incremental impact
-* attractive attribution metrics that do not necessarily represent additional business
-
-This project therefore looks beyond campaign-level KPIs and connects **acquisition economics, customer behavior, growth, and measurement confidence**.
+**Marketing Touchpoints → Customer Acquisition → Campaign Economics → Customer Quality → Booking Growth → Attribution Integrity → Business Recommendations**
 
 ---
 
-## Key Business Questions
+## Business Questions
 
-The analysis is designed to answer:
+The analysis focuses on seven questions:
 
-1. **How are customers being acquired?**
-2. **Which campaigns acquire customers efficiently?**
-3. **Do different campaigns produce meaningfully different customer behavior?**
-4. **How does customer value differ across acquisition sources and customer segments?**
-5. **How does the contribution of new vs. repeat bookings change over time?**
-6. **Can campaign-attributed bookings be interpreted as incremental business impact?**
-7. **Where should marketing investment be maintained, optimized, investigated, or validated?**
+1. How are customers being acquired across paid and non-paid sources?
+2. Which campaigns acquire customers most efficiently?
+3. Do different acquisition campaigns produce meaningfully different customer behavior?
+4. Which campaigns are associated with higher observed customer value?
+5. How is the contribution of new versus repeat bookings changing over time?
+6. Can attributed bookings be interpreted as incremental business impact?
+7. Where should marketing investment be continued, optimized, validated, or investigated?
 
 ---
 
 # Key Findings
 
-## 1. Paid marketing is the primary acquisition engine
+## Paid marketing is the primary acquisition engine
 
 In 2025, **5,456 customers** made at least one booking.
 
-Of these:
+| Acquisition Source | Customers | Share |
+| --- | --- | --- |
+| Paid Campaign | 4,638 | **85.01%** |
+| Organic / Direct / Unattributed | 818 | 14.99% |
+| **Total** | **5,456** | **100%** |
 
-* **4,638 customers (85.01%)** were acquired through paid campaigns
-* **818 customers (14.99%)** were classified as Organic / Direct / Unattributed
+Paid marketing therefore represents the primary customer acquisition engine.
 
-This makes paid marketing the dominant customer acquisition engine in the dataset.
-
-However, an unattributed first booking does not necessarily mean the customer was organically acquired. It means there was no attributable non-direct marketing campaign under the defined attribution rules.
+The non-paid / unattributed group should not be interpreted as purely organic acquisition. It represents customers whose first booking did not receive attribution from an eligible non-direct marketing campaign under the defined attribution rules.
 
 ---
 
-## 2. Brand Search and Hotel Deals show the strongest acquisition economics
+## Brand Search and Hotel Deals show the strongest acquisition economics
 
 Among the normal campaigns:
 
-| Campaign           | Acquired |       CAC |     ROAS | Avg. First Booking |
-| ------------------ | -------: | --------: | -------: | -----------------: |
-| Brand Search       |    1,146 | **73.12** | **4.85** |             354.52 |
-| Hotel Deals        |      931 | **79.31** | **4.84** |         **383.86** |
-| Generic Search     |    1,137 |    100.51 |     3.65 |             366.91 |
-| Summer Sale        |      946 |    101.17 |     3.67 |             370.94 |
-| Travel Inspiration |      458 |     95.84 |     3.81 |             365.19 |
+| Campaign | Acquired | Acquisition Share | CAC | ROAS | Avg. First Booking |
+| --- | --- | --- | --- | --- | --- |
+| Brand Search | 1,146 | 24.71% | **73.12** | **4.85** | 354.52 |
+| Hotel Deals | 931 | 20.07% | **79.31** | **4.84** | **383.86** |
+| Generic Search | 1,137 | 24.52% | 100.51 | 3.65 | 366.91 |
+| Summer Sale | 946 | 20.39% | 101.17 | 3.67 | 370.94 |
+| Travel Inspiration | 458 | 9.87% | 95.84 | 3.81 | 365.19 |
 
-Brand Search combines the largest acquisition volume with the lowest CAC and highest first-booking ROAS.
+**Brand Search** combines the largest acquisition volume with the cheapest CAC and highest first-booking ROAS.
 
-Hotel Deals shows similarly strong acquisition efficiency while producing the highest average first-booking value among the normal campaigns.
+**Hotel Deals** shows similarly strong acquisition efficiency and the highest average first-booking value among the normal campaigns.
 
-This makes **Brand Search and Hotel Deals the strongest current investment candidates**.
+This makes both campaigns the strongest current investment candidates, subject to validating marginal economics as spend increases.
 
 ---
 
-## 3. Customer behavior is more similar across campaigns than acquisition efficiency
+## Acquisition efficiency differentiates campaigns more than conversion rate
 
-Major campaigns have broadly similar customer mixes:
+Campaign conversion rates are relatively close across the major campaigns:
 
-| Campaign           | One-time | Repeat | Frequent |
-| ------------------ | -------: | -----: | -------: |
-| Brand Search       |    61.7% |  16.7% |    21.6% |
-| Generic Search     |    62.4% |  16.5% |    21.2% |
-| Summer Sale        |    64.3% |  14.6% |    21.1% |
-| Hotel Deals        |    63.8% |  14.9% |    21.3% |
-| Travel Inspiration |    64.6% |  15.9% |    19.4% |
+| Campaign | Reached | Converted | Conversion |
+| --- | --- | --- | --- |
+| Brand Search | 4,449 | 3,186 | 71.61% |
+| Generic Search | 4,355 | 3,178 | 72.97% |
+| Summer Sale | 3,930 | 2,874 | 73.13% |
+| Hotel Deals | 3,952 | 2,868 | 72.57% |
+| Travel Inspiration | 2,276 | 1,730 | 76.01% |
 
-There is no strong evidence that the major campaigns acquire fundamentally different customer populations based on booking frequency alone.
+This suggests that observed conversion rate is not a major differentiator among the normal campaigns.
+
+The more meaningful differences are in **acquisition cost, scale, and downstream customer value**.
+
+ROAS should also be interpreted carefully: it is calculated using first-booking value and therefore **does not represent profit or full customer lifetime value.**
+
+---
+
+## Customer behavior is broadly similar across campaigns
+
+Customers are segmented by observed booking frequency:
+
+- **One-time:** 1 booking
+- **Repeat:** 2 bookings
+- **Frequent:** 3+ bookings
+
+Across the major campaigns:
+
+| Campaign | One-time | Repeat | Frequent |
+| --- | --- | --- | --- |
+| Brand Search | 61.7% | 16.7% | 21.6% |
+| Generic Search | 62.4% | 16.5% | 21.2% |
+| Summer Sale | 64.3% | 14.6% | 21.1% |
+| Hotel Deals | 63.8% | 14.9% | 21.3% |
+| Travel Inspiration | 64.6% | 15.9% | 19.4% |
+
+The customer mix is relatively consistent, with no strong evidence that the major campaigns acquire fundamentally different customers based on booking frequency.
 
 Observed monetary value provides more differentiation.
 
-For example:
+### Observed value among repeat customers
 
-* Hotel Deals had the highest observed value among repeat customers: **791**
-* Travel Inspiration had the highest observed value among frequent customers: **1,327**
-* Brand Search remained strong across both acquisition economics and downstream customer value
+| Campaign | Avg. Customer Value |
+| --- | --- |
+| Hotel Deals | **791** |
+| Generic Search | 748 |
+| Brand Search | 722 |
+| Travel Inspiration | 708 |
+| Summer Sale | 664 |
 
-This suggests that **customer quality should not be evaluated using retention or booking frequency alone**.
+### Observed value among frequent customers
 
-> Observed customer value is not full LTV. Customers acquired earlier in the year have more opportunity to generate additional bookings.
+| Campaign | Avg. Customer Value |
+| --- | --- |
+| Travel Inspiration | **1,327** |
+| Brand Search | 1,319 |
+| Generic Search | 1,265 |
+| Summer Sale | 1,238 |
+| Hotel Deals | 1,233 |
 
----
+This shows why customer quality should not be evaluated using booking frequency alone.
 
-## 4. Existing customers became increasingly important to booking growth
+Travel Inspiration, for example, has the lowest frequent-customer share among the major campaigns but the highest observed value among frequent customers.
 
-The dataset contains:
-
-* **8,456 customers reached**
-* **5,456 customers who booked**
-* **9,140 total bookings**
-* **1.68 bookings per converted customer**
-
-The composition of monthly bookings also changed during the year.
-
-Repeat bookings represented:
-
-* **2.00%** of January bookings
-* **20.51%** in March
-* **41.32%** in June
-* **46.11%** in September
-* **47.89%** in October
-* **44.87%** in December
-
-This does not prove that retention improved, because the existing customer base naturally accumulates over time.
-
-It does show that **existing customers became an increasingly important contributor to booking volume**.
-
-Therefore, growth should not be viewed purely as an acquisition problem. Rebooking and customer value are also important parts of the growth strategy.
+Observed customer value is not full LTV. Customers acquired earlier in the year have a longer opportunity to generate additional bookings, so these values should be interpreted directionally.
 
 ---
 
-## 5. Attribution credit is not the same as incremental impact
+# Growth Context
 
-The project uses a:
+The customer base generated:
 
-* last-touch attribution model
-* non-direct marketing touchpoints
-* 30-day lookback window
+- **8,456 customers reached**
+- **5,456 customers who booked**
+- **9,140 total bookings**
+- **1.68 bookings per converted customer**
 
-This answers:
+The composition of monthly bookings changed substantially during the year.
+
+| Month | New Bookings | Repeat Bookings | Total | Repeat Share |
+| --- | --- | --- | --- | --- |
+| Jan | 98 | 2 | 100 | 2.00% |
+| Mar | 531 | 137 | 668 | 20.51% |
+| Jun | 490 | 345 | 835 | 41.32% |
+| Sep | 506 | 433 | 939 | 46.11% |
+| Oct | 469 | 431 | 900 | 47.89% |
+| Dec | 521 | 424 | 945 | 44.87% |
+
+Repeat bookings increased from **2.00% of January bookings to roughly 45–48% during much of the second half of the year**.
+
+This does not establish that retention improved, since the existing customer base naturally accumulates over time.
+
+It does establish that **existing customers became an increasingly important contributor to booking volume**.
+
+The growth opportunity should therefore not be framed purely as customer acquisition. Rebooking and customer value are important components of the growth strategy.
+
+---
+
+# Attribution Integrity
+
+## Attribution methodology
+
+Campaign attribution uses a:
+
+- **Last-touch** model
+- **Non-direct** marketing touchpoints
+- **30-day lookback window**
+
+For each booking, the most recent eligible marketing touchpoint within the preceding 30 days receives attribution credit.
+
+The model answers:
 
 > **Which eligible marketing touchpoint receives reporting credit?**
+> 
 
 It does not answer:
 
-> **Would the booking have happened without that campaign?**
+> **Would the booking have happened without the campaign?**
+> 
 
-This distinction becomes important when evaluating campaign economics.
+Therefore:
 
-### CMP008 attribution investigation
+> **Attributed booking ≠ proven incremental booking.**
+> 
 
-CMP008 — Weekend Getaway — was intentionally designed as an attribution-quality challenge in the synthetic dataset.
+This distinction is critical when using campaign performance to make investment decisions.
 
-It had:
+---
 
-* 132 customers reached
-* 118 customers who subsequently booked
-* **89.39% observed conversion**
-* 38 attributed bookings
-* 36 of 38 attributed bookings (**94.74%**) had prior marketing exposure
+## CMP008 investigation
 
-The pattern is unusual enough to investigate, but the analysis does **not** establish that CMP008:
+CMP008 — Weekend Getaway — presents an unusual attribution pattern.
 
-* stole attribution from another campaign
-* caused the bookings
-* generated no incremental demand
+| Metric | Observation |
+| --- | --- |
+| Customers reached | 132 |
+| Customers subsequently booking | 118 |
+| Observed conversion | **89.39%** |
+| Attributed bookings | 38 |
+| Attributed bookings with prior marketing exposure | 36 |
+| Prior marketing exposure rate | **94.74%** |
 
-The appropriate conclusion is:
+The combination of unusually high observed conversion, limited reach, short campaign duration, and high prior marketing exposure makes CMP008 an attribution-quality signal worth investigating.
 
-> **CMP008 is an attribution-quality signal that should reduce confidence in using its observed performance as a normal campaign benchmark.**
+However, the available data does **not** establish that CMP008:
 
-A stronger causal design, such as a holdout or geo experiment, would be required to establish incrementality.
+- stole attribution from another campaign
+- caused the bookings
+- generated no incremental demand
+
+In conclusion:
+
+> **CMP008 should not be benchmarked against the normal campaigns until its attribution behavior is better understood.**
+> 
 
 ---
 
 # Business Recommendations
 
-The analysis leads to a focused set of actions.
+## Campaign investment
 
-### Continue / consider scaling
+| Campaign | Recommended Action | Rationale |
+| --- | --- | --- |
+| **Brand Search** | Continue / consider scaling | Strongest combination of scale, CAC, ROAS, and observed customer value |
+| **Hotel Deals** | Continue / investment candidate | Strong CAC and ROAS with high first-booking and repeat-customer value |
+| **Generic Search** | Optimize before scaling | Meaningful scale but materially weaker CAC and ROAS |
+| **Summer Sale** | Review and optimize | Meaningful scale but weaker acquisition economics and lower repeat-customer value |
+| **Travel Inspiration** | Validate before scaling | Interesting frequent-customer value signal despite weaker acquisition efficiency |
+| **CMP008** | Investigate separately | Unusual attribution pattern and insufficient evidence for normal benchmarking |
 
-**Brand Search**
+The appropriate scaling principle is:
 
-Strongest combination of scale and efficiency:
+> **Scale demonstrated economics, optimize weaker economics, validate promising signals, and investigate measurement anomalies before increasing investment.**
+> 
 
-* 1,146 acquired customers
-* CAC: 73.12
-* ROAS: 4.85
-
-Scale should still be evaluated using marginal CAC rather than assuming historical efficiency will remain constant.
-
-**Hotel Deals**
-
-Strong acquisition efficiency and high observed customer value:
-
-* CAC: 79.31
-* ROAS: 4.84
-* highest normal-campaign first-booking value
-* highest observed repeat-customer value
+Scaling decisions should also consider marginal CAC and incrementality rather than assuming historical performance will remain constant.
 
 ---
 
-### Optimize before scaling
+## Broader growth priorities
 
-**Generic Search**
+### 1. Acquire efficiently
 
-Meaningful acquisition scale, but CAC is materially higher than Brand Search and Hotel Deals.
+Paid campaigns account for 85.01% of acquired customers, making acquisition efficiency strategically important.
 
-**Summer Sale**
+Investment should prioritize campaigns that demonstrate strong economics at sufficient scale.
 
-Similar scale to Generic Search, with weaker acquisition economics and the lowest observed repeat-customer value among the major campaigns.
+### 2. Increase value from existing customers
 
-Both should be optimized before additional budget is committed.
+Repeat bookings became an increasingly important contributor to booking volume.
 
----
+Relevant areas for further optimization include:
 
-### Validate before scaling
+- customer lifecycle segmentation
+- rebooking campaigns
+- personalized offers
+- post-booking engagement
+- cohort-based customer value measurement
 
-**Travel Inspiration**
+### 3. Improve measurement confidence
 
-Acquisition economics are weaker, but frequent customers show the highest observed value among the major campaigns.
+Campaign reporting should distinguish between:
 
-This is an interesting signal that warrants further cohort/LTV analysis rather than immediate scaling.
+**Observed attribution**
 
----
+and
 
-### Investigate separately
+**Incremental business impact**
 
-**Weekend Getaway (CMP008)**
-
-The campaign's unusual conversion and attribution pattern make it unsuitable for normal campaign benchmarking.
-
-It should be treated as a measurement investigation rather than as a high-performing campaign.
-
----
-
-# Analytical Framework
-
-Campaign performance is evaluated across five dimensions:
-
-**Scale**
-→ How many customers does the campaign acquire?
-
-**Efficiency**
-→ How much does it cost to acquire them?
-
-**Initial Value**
-→ What is the value of the first booking?
-
-**Customer Quality**
-→ What happens after acquisition?
-
-**Measurement Confidence**
-→ How reliable is the performance signal?
-
-This prevents the analysis from reducing campaign performance to a single KPI such as ROAS.
+Attribution remains useful for performance reporting, but investment decisions should incorporate measurement confidence.
 
 ---
 
-# Attribution Approach
+# Analytical Limitations
 
-The project uses a **last-touch, non-direct, 30-day lookback attribution model**.
+### Supported by the analysis
 
-For each booking:
+The data supports conclusions about:
 
-1. Identify marketing touchpoints before the booking.
-2. Restrict eligible touchpoints to the previous 30 days.
-3. Exclude Direct / Organic touchpoints.
-4. Assign credit to the most recent eligible marketing touchpoint.
+- campaign acquisition volume
+- acquisition share
+- CAC
+- first-booking ROAS
+- customer booking-frequency segments
+- observed customer booking value
+- booking growth composition
+- attribution assignments under the defined model
+- unusual attribution patterns
 
-The customer's **acquisition campaign** is determined separately from later booking attribution.
+### Not established by the analysis
 
-This distinction allows the project to answer both:
+The analysis does not establish:
 
-* Which campaign acquired the customer?
-* Which campaign received attribution for later bookings?
+- true campaign profitability
+- incremental revenue
+- causal campaign impact
+- complete customer lifetime value
+- causal differences in retention between campaigns
+- whether CMP008 displaced or stole attribution
+- whether CMP008 generated incremental demand
 
-A customer may therefore be acquired through one campaign and later have bookings attributed to another campaign.
-
----
-
-# Customer Quality Framework
-
-Customers are segmented based on observed booking frequency:
-
-| Segment  | Definition  |
-| -------- | ----------- |
-| One-time | 1 booking   |
-| Repeat   | 2 bookings  |
-| Frequent | 3+ bookings |
-
-Across the 5,456 acquired customers:
-
-* **3,443 (63.1%)** were One-time
-* **847 (15.5%)** were Repeat
-* **1,166 (21.4%)** were Frequent
-
-Customer value is based on observed booking value across the available 2025 observation window.
-
-It should not be interpreted as complete lifetime value.
+These limitations define the appropriate confidence level for each business decision.
 
 ---
 
 # Data & Technical Architecture
 
-The project uses synthetic data designed to simulate a realistic OTA marketing analytics environment.
+The analytical environment consists of:
 
-Customer journeys are generated first, with related marketing touchpoints, bookings, and attribution derived from those journeys.
+- **Python** — data generation, ingestion, and pipeline execution
+- **SQL** — analytical transformations and business logic
+- **DuckDB** — local analytical database
+- **Git / GitHub** — version control
 
 ### Core tables
 
-* `customers`
-* `touchpoints`
-* `bookings`
-* `campaigns`
-* `channels`
-* `ad_performance`
-* `customer_first_booking`
-* `acquired_customer_behavior`
+- `customers`
+- `touchpoints`
+- `bookings`
+- `campaigns`
+- `channels`
+- `ad_performance`
+- `customer_first_booking`
+- `acquired_customer_behavior`
 
-### Technology
+### Pipeline
 
-* **Python** — data generation, ingestion, pipeline execution
-* **SQL** — analytical transformations and business logic
-* **DuckDB** — local analytical database
-* **Git / GitHub** — version control and project documentation
-
-The project is designed to run locally without requiring a cloud data warehouse.
-
----
-
-# Project Pipeline
-
-```text
-Synthetic Data Generation
-        ↓
+```
+Data Generation
+      ↓
 Python Ingestion
-        ↓
+      ↓
 DuckDB
-        ↓
+      ↓
 SQL Transformations
-        ↓
+      ↓
 Customer Acquisition
-        ↓
+      ↓
 CAC & ROAS
-        ↓
+      ↓
 Customer Quality
-        ↓
-Funnel & Growth Analysis
-        ↓
+      ↓
+Funnel & Growth
+      ↓
 Attribution Integrity
-        ↓
+      ↓
 Business Recommendations
 ```
 
-The pipeline is designed so that data generation and ingestion can be rerun consistently, while analytical queries remain separate from the underlying data-generation process.
+The analytical layer is separated from the data-generation and ingestion processes so that the underlying data can be regenerated while analytical logic remains reusable.
 
 ---
 
-# Synthetic Data Design
+# Synthetic Data & Analytical Environment
 
-The dataset is intentionally more complex than a collection of independently generated CSV files.
+All data used in the analysis is synthetic.
 
-Customer journeys are generated first, and related marketing touchpoints, bookings, and attribution are derived from those journeys.
+The dataset was generated to simulate a realistic OTA marketing environment while preserving relationships between customer journeys, marketing touchpoints, bookings, and campaign attribution.
 
-This allows the dataset to preserve meaningful relationships between:
+The synthetic environment contains:
 
-```text
-Customer behavior
-       ↓
-Marketing touchpoints
-       ↓
-Bookings
-       ↓
-Campaign attribution
-       ↓
-Customer acquisition & quality
-       ↓
-Marketing performance
-       ↓
-Business decisions
-```
+- **40,890 marketing touchpoints**
+- **8,456 customers reached**
+- **5,456 customers with bookings**
+- **9,140 bookings**
+- booking activity spanning **January–December 2025**
 
-The synthetic data includes intentional scenarios such as:
+The data includes intentionally constructed scenarios such as:
 
-* repeat bookings
-* cross-campaign customer journeys
-* Direct / Organic bookings
-* attribution lookback windows
-* different campaign performance profiles
-* non-converting marketing touchpoints
-* an attribution-quality challenge involving CMP008
+- repeat customer journeys
+- cross-campaign marketing exposure
+- Direct / Organic interactions
+- 30-day attribution lookback behavior
+- different campaign performance profiles
+- non-converting touchpoints
+- attribution-quality anomalies
 
-The purpose is not to reproduce a real company's data exactly.
+The purpose of the synthetic environment is to support analysis of realistic business questions and edge cases without exposing real customer or company data.
 
-Instead, the dataset is designed to reproduce the types of relationships, edge cases, and analytical questions that can occur in a real marketing analytics environment.
-
-For detailed data-model decisions, customer journey logic, attribution rules, and synthetic-data design, see [`DATA_DESIGN.md`](DATA_DESIGN.md).
-
----
-
-# Important Limitations
-
-This project uses synthetic data and therefore does not represent actual business performance.
-
-The analysis can demonstrate:
-
-* analytical reasoning
-* SQL and data modeling
-* data pipeline design
-* marketing measurement
-* customer behavior analysis
-* business recommendation development
-
-However, the analysis cannot establish:
-
-* true campaign profitability
-* incremental revenue
-* causal campaign impact
-* complete customer lifetime value
-* whether CMP008 actually caused or displaced bookings
-
-In particular:
-
-> **Attributed revenue should not automatically be interpreted as incremental revenue.**
+For the underlying data-generation logic, attribution assumptions, customer journey design, and data-model decisions, see `DATA_DESIGN.md`.
