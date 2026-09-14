@@ -1,3 +1,12 @@
+""" 
+Run analytical SQL queries in duckDB (database)
+
+purpose: this script is python code (py runner) for exploring&validating analytical queries during development, without the need to rewrite path and duckdb function in terminal.
+therefore, SQL code can be written in "queries" folder as .sql file, like writing SQL query in SQL platform.
+The result is loaded into pandas dataframe and displayed in a readable tab format in terminal.
+in short, it shows preview of query result in terminal (like BigQuery does)
+"""
+
 from pathlib import Path
 import duckdb
 import sys

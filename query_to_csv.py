@@ -1,3 +1,16 @@
+""" 
+Run analytical SQL queries in duckDB (database)
+
+purpose: this script is python code (py runner) for exploring&validating analytical queries during development, without the need to rewrite path and duckdb function in terminal.
+therefore, SQL code can be written in "queries" folder as .sql file, like writing SQL query in SQL platform.
+The result is loaded into csv (comma separated value) and displayed in a CSV format in terminal.
+This code is made to make copy-pasting result to Excel/Sheet easier.
+to run the code and make the result as ready to copy format, 
+run it by this code in terminal (without the "):
+
+"python query_to_csv.py (your_sql_file_name).sql | pbcopy"
+
+"""
 from pathlib import Path
 import duckdb
 import sys

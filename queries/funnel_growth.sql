@@ -29,8 +29,9 @@ WITH ranked_bookings AS (
         ) AS booking_rank
     FROM bookings
 )
+
 SELECT
-    DATE_TRUNC('month', booking_timestamp) AS booking_month,
+    CAST(DATE_TRUNC('month', booking_timestamp) AS DATE) AS booking_month,
     CASE
         WHEN booking_rank = 1 THEN 'New'
         ELSE 'Repeat'
